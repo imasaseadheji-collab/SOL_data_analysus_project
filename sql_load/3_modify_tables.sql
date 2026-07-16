@@ -1,46 +1,90 @@
-/* ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
-Database Load Issues (follow if receiving permission denied when running SQL code below)
-
-Possible Errors: 
-- ERROR >>  duplicate key value violates unique constraint "company_dim_pkey"
-- ERROR >> could not open file "C:\Users\...\company_dim.csv" for reading: Permission denied
-
-1. Drop the Database 
-            DROP DATABASE IF EXISTS sql_course;
-2. Repeat steps to create database and load table schemas
-            - 1_create_database.sql
-            - 2_create_tables.sql
-3. Open pgAdmin
-4. In Object Explorer (left-hand pane), navigate to `sql_course` database
-5. Right-click `sql_course` and select `PSQL Tool`
-            - This opens a terminal window to write the following code
-6. Get the absolute file path of your csv files
-            1. Find path by right-clicking a CSV file in VS Code and selecting “Copy Path”
-7. Paste the following into `PSQL Tool`, (with the CORRECT file path)
-
-\copy company_dim FROM '[Insert File Path]/company_dim.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
-
-\copy skills_dim FROM '[Insert File Path]/skills_dim.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
-
-\copy job_postings_fact FROM '[Insert File Path]/job_postings_fact.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
-
-\copy skills_job_dim FROM '[Insert File Path]/skills_job_dim.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
-
-*/
-
--- NOTE: This has been updated from the video to fix issues with encoding
 COPY company_dim
-FROM 'C:\Program Files\PostgreSQL\16\data\Datasets\sql_course\company_dim.csv'
-WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
+FROM 'C:\Users\LAPTOP\Desktop\SOL_data_analysus_project\csv_files\company_dim.csv'
+DELIMITER ',' CSV HEADER;
 
 COPY skills_dim
-FROM 'C:\Program Files\PostgreSQL\16\data\Datasets\sql_course\skills_dim.csv'
-WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
+FROM 'C:\Users\LAPTOP\Desktop\SOL_data_analysus_project\csv_files\skills_dim.csv'
+DELIMITER ',' CSV HEADER;
 
 COPY job_postings_fact
-FROM 'C:\Program Files\PostgreSQL\16\data\Datasets\sql_course\job_postings_fact.csv'
-WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
+FROM 'C:\Users\LAPTOP\Desktop\SOL_data_analysus_project\csv_files\job_postings_fact.csv'
+DELIMITER ',' CSV HEADER;
 
 COPY skills_job_dim
-FROM 'C:\Program Files\PostgreSQL\16\data\Datasets\sql_course\skills_job_dim.csv'
-WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
+FROM 'C:\Users\LAPTOP\Desktop\SOL_data_analysus_project\csv_files\skills_job_dim.csv'
+DELIMITER ',' CSV HEADER;
+
+CREATE TABLE january_jobs AS
+    SELECT *
+    FROM job_postings_fact
+    WHERE EXTRACT(MONTH FROM job_posted_date) = 1;
+
+-- February
+CREATE TABLE february_jobs AS
+    SELECT * FROM job_postings_fact
+    WHERE EXTRACT(MONTH FROM job_posted_date) = 2;
+
+-- March
+CREATE TABLE march_jobs AS
+    SELECT * FROM job_postings_fact
+    WHERE EXTRACT(MONTH FROM job_posted_date) = 3;
+
+-- April
+CREATE TABLE april_jobs AS
+    SELECT * FROM job_postings_fact
+    WHERE EXTRACT(MONTH FROM job_posted_date) = 4;
+
+-- May
+CREATE TABLE may_jobs AS
+    SELECT * FROM job_postings_fact
+    WHERE EXTRACT(MONTH FROM job_posted_date) = 5;
+
+-- June
+CREATE TABLE june_jobs AS
+    SELECT * FROM job_postings_fact
+    WHERE EXTRACT(MONTH FROM job_posted_date) = 6;
+
+-- July
+CREATE TABLE july_jobs AS
+    SELECT * FROM job_postings_fact
+    WHERE EXTRACT(MONTH FROM job_posted_date) = 7;
+
+-- August
+CREATE TABLE august_jobs AS
+    SELECT * FROM job_postings_fact
+    WHERE EXTRACT(MONTH FROM job_posted_date) = 8;
+
+-- September
+CREATE TABLE september_jobs AS
+    SELECT * FROM job_postings_fact
+    WHERE EXTRACT(MONTH FROM job_posted_date) = 9;
+
+-- October
+CREATE TABLE october_jobs AS
+    SELECT * FROM job_postings_fact
+    WHERE EXTRACT(MONTH FROM job_posted_date) = 10;
+
+-- November
+CREATE TABLE november_jobs AS
+    SELECT * FROM job_postings_fact
+    WHERE EXTRACT(MONTH FROM job_posted_date) = 11;
+
+-- December
+CREATE TABLE december_jobs AS
+    SELECT * FROM job_postings_fact
+    WHERE EXTRACT(MONTH FROM job_posted_date) = 12;
+
+SELECT 
+    job_title_short,
+    company_id,
+    job_location
+FROM 
+    january_jobs 
+UNION 
+
+SELECT 
+    job_title_short,
+    company_id,
+    job_location
+FROM
+    february_jobs
